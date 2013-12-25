@@ -1,5 +1,6 @@
 from __future__ import absolute_import
 import sys, os, traceback, signal as signalmodule
+import ctypes
 
 __all__ = ['get_version',
            'get_header_version',
@@ -12,7 +13,11 @@ __all__ = ['get_version',
 def st_nlink_type():
     if sys.platform == "darwin":
         return "short"
-    return "long long"
+
+    if ctypes.sizeof(ctypes.c_voidp) == 8:
+        return "long long"
+
+    return "int"
 
 
 from cffi import FFI
